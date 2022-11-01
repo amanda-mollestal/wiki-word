@@ -19,7 +19,6 @@ export class Console {
   async getInput (question) {
     const answer = await this.#rl.question(`${question} `)
     return answer
-   
   }
 
   async printMenu () {
@@ -38,6 +37,19 @@ export class Console {
   async getSubject () {
      const answer = await this.getInput('Enter a wiki article subject:')
      return answer
+  }
+
+  printWordHints (arrayOfHints) {
+    let str = ''
+    for(const x of arrayOfHints) {
+      str = str + x + ' '
+    }
+    console.log(str)
+  }
+
+  async getWordGuess() {
+    const guess = await this.getInput('Make a guess: ')
+    return guess
   }
 
   closeReadline () {

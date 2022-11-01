@@ -13,34 +13,51 @@ export class WordGetter {
 
 async scrapeWikiForWords (subject) {
 
-  const url = 'https://en.wikipedia.org/wiki/'
+   const tags = await this.scrapceUrlForForText(subject)
+   //console.log(subject)
 
-  const html = await this.#scraper.getHtmlFromUrl(url + subject) 
-    const tags = await this.#scraper.scrapeHtmlForTags(html, 'p')
-
+   if(tags.length > 0) {
     const goodWordsArray = []
 
-    for(const tag of tags) {
-      const text = tag.textContent
+        for(const tag of tags) {
+          const text = tag.textContent
 
-      const wordArray = text.split(" ")
+          const wordArray = text.split(" ")
 
-      for(const word of wordArray) {
-        if(word.length > 5 && /^[a-z]+$/i.test(word)) {
-          goodWordsArray.push(word)
+          for(const word of wordArray) {
+            if(word.length > 5 && /^[a-z]+$/i.test(word)) {
+              goodWordsArray.push(word)
+            }
+          }
+          
         }
-      }
-      
-    }
-  
-    this.#listOfWords = goodWordsArray
+        //console.log(goodWordsArray)
+        this.#listOfWords = goodWordsArray
+   }
+
+    
    
+}
+
+async scrapceUrlForForText(subject) {
+  const url = 'https://en.wikipedia.org/wiki/'
+
+  try {
+    const html = await this.#scraper.getHtmlFromUrl(url + subject) 
+    const tags = await this.#scraper.scrapeHtmlForTags(html, 'p')
+    //console.log(tags)
+    return tags
+  } catch (error) {
+    console.log('There were no articals matching your subject')
+    return []
+  }
 }
 
 getRandomWord () {
   const nr = Math.floor(Math.random() * this.#listOfWords.length);
   //console.log(this.#listOfWords)
 
+  return this.#listOfWords[nr]
   console.log(this.#listOfWords[nr])
 
 }

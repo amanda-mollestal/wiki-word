@@ -13,7 +13,7 @@ export class Game {
     while(running) {
       const play = await this.#view.printMenu()
       if(play) {
-        await this.playRound()
+        await this.playGame()
       } else {
         running = false
       }
@@ -28,9 +28,35 @@ export class Game {
     }
   }*/ 
 
-  async playRound () {
+  async playGame () {
+
+    await this.getAndSetGameSubject()
+    //const sub = this.#gameModel.getSubject() 
+    //console.log(sub)
+
+    await this.playRound()
+
+
+   /* while(true) {
+      await this.playRound()
+    } */ 
+    
+  
+    
+    
+  }
+
+  async playRound() {
+    await this.#gameModel.generateWord()
+    this.#view.printWordHints(this.#gameModel.getWordHints()) 
+    const guess = await this.#view.getWordGuess()
+    console.log(guess)
+    
+  }
+
+  async getAndSetGameSubject() {
     const answer = await this.#view.getSubject()
-    console.log(answer)
+    await this.#gameModel.setSubject(answer)
   }
 
 
