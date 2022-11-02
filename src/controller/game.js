@@ -34,23 +34,36 @@ export class Game {
     //const sub = this.#gameModel.getSubject() 
     //console.log(sub)
 
-    await this.playRound()
+    //await this.playRound()
 
-
-   /* while(true) {
-      await this.playRound()
-    } */ 
+    while(await this.playRound()) {
+    } 
     
   
-    
     
   }
 
   async playRound() {
-    await this.#gameModel.generateWord()
-    this.#view.printWordHints(this.#gameModel.getWordHints()) 
-    const guess = await this.#view.getWordGuess()
-    console.log(guess)
+    
+
+   await this.#gameModel.generateWord()
+    let running = true
+    do {
+      this.#view.printWordHints(this.#gameModel.getWordHints()) 
+      const guess = await this.#view.getWordGuess()
+      if(!this.#gameModel.isGuessRight(guess)) {
+         this.#gameModel.compareGuessAndWord(guess)
+        //console.log(guess)
+      } else {
+        console.log('HELT RÄTT')
+        running = false 
+        return await this.#view.playAgain()
+      }
+    } while (running);
+
+
+
+    
     
   }
 

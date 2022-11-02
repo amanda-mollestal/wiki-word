@@ -25,6 +25,7 @@ export class Game {
   }
 
   generateWord() {
+    this.#wordHints = []
     this.#word = this.#wordGetter.getRandomWord()
    for(let i = 0; i < this.#word.length; i++) {
       this.#wordHints.push('_')
@@ -34,6 +35,18 @@ export class Game {
 
   getWordHints() {
     return this.#wordHints
+  }
+
+  isGuessRight(guess) {
+    return (guess === `${this.#word}`)
+  }
+
+  compareGuessAndWord(guess) {
+    for(let i = 0; i < this.#word.length; i++) {
+      if(guess[i] === this.#word[i]) {
+        this.#wordHints[i] = this.#word[i]
+      }
+    }
   }
 
   setPlayerGuess(guess) {

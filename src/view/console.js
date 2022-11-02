@@ -52,6 +52,17 @@ export class Console {
     return guess
   }
 
+  async playAgain() {
+    const answer = await this.getInput('Press P to play again with this subject or Q to go back:')
+    if(answer == 'p') {
+      return true
+    } else if (answer == 'q') {
+      return false
+    } else {
+      return false
+    }
+  }
+
   closeReadline () {
     this.#rl.close()
   }
