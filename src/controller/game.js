@@ -8,10 +8,10 @@ export class Game {
   }
 
   async run () {
-    this.#view.printWelcome()
+    this.#view.displayWelcome()
     let running = true
     while(running) {
-      const play = await this.#view.printMenu()
+      const play = await this.#view.displayMenu()
       if(play) {
         await this.playGame()
       } else {
@@ -21,20 +21,10 @@ export class Game {
    this.#view.closeReadline()
   }
 
-  /*doMenu() {
-    const play = this.#view.printMenu()
-    if(play) {
-      this.playRound()
-    }
-  }*/ 
 
   async playGame () {
 
     await this.getAndSetGameSubject()
-    //const sub = this.#gameModel.getSubject() 
-    //console.log(sub)
-
-    //await this.playRound()
 
     while(await this.playRound()) {
     } 
@@ -45,12 +35,14 @@ export class Game {
 
   async playRound() {
     
-
    await this.#gameModel.generateWord()
     let running = true
+    
     do {
-      this.#view.printWordHints(this.#gameModel.getWordHints()) 
-      const guess = await this.#view.getWordGuess()
+      this.#view.displayWordHints(this.#gameModel.getWordHints()) 
+      const guess = await this.#view.getWordGuess(this.#gameModel.getNrOfGuesses())
+      //this.#view.displayNrOfGuesses(this.#gameModel.getNrOfGuesses())
+
       if(!this.#gameModel.isGuessRight(guess)) {
          this.#gameModel.compareGuessAndWord(guess)
         //console.log(guess)
@@ -59,10 +51,7 @@ export class Game {
         running = false 
         return await this.#view.playAgain()
       }
-    } while (running);
-
-
-
+    } while (running)
     
     
   }

@@ -12,7 +12,7 @@ export class Console {
     this.#rl.close()
   }
 
-  printWelcome () {
+  displayWelcome () {
     console.log(' == WELCOME TO WIKI-WORD == ')
   }
 
@@ -21,7 +21,7 @@ export class Console {
     return answer
   }
 
-  async printMenu () {
+  async displayMenu () {
     const answer = await this.getInput('Press P to play a new game or Q to quit:')
 
     if(answer == 'p') {
@@ -39,7 +39,7 @@ export class Console {
      return answer
   }
 
-  printWordHints (arrayOfHints) {
+  displayWordHints (arrayOfHints) {
     let str = ''
     for(const x of arrayOfHints) {
       str = str + x + ' '
@@ -47,10 +47,12 @@ export class Console {
     console.log(str)
   }
 
-  async getWordGuess() {
-    const guess = await this.getInput('Make a guess: ')
+  async getWordGuess(nr) {
+    const guess = await this.getInput(`Guess nr ${nr + 1}:`)
     return guess
   }
+
+ 
 
   async playAgain() {
     const answer = await this.getInput('Press P to play again with this subject or Q to go back:')

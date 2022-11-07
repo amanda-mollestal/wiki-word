@@ -6,18 +6,19 @@ export class Game {
   #word
   #wordHints
   #subject
+  #nrOfGuesses
 
   constructor () {
     this.#wordGetter = new WordGetter()
     this.#word = ''
     this.#wordHints = []
+    this.#nrOfGuesses = 0
   }
 
 
   async setSubject (subject) {
     await this.#wordGetter.scrapeWikiForWords(subject)
     this.#subject = subject
-
   }
 
   getSubject() {
@@ -25,6 +26,7 @@ export class Game {
   }
 
   generateWord() {
+    this.#nrOfGuesses = 0
     this.#wordHints = []
     this.#word = this.#wordGetter.getRandomWord()
    for(let i = 0; i < this.#word.length; i++) {
@@ -37,8 +39,13 @@ export class Game {
     return this.#wordHints
   }
 
+  getNrOfGuesses() {
+    return this.#nrOfGuesses
+  }
+
   isGuessRight(guess) {
-    return (guess === `${this.#word}`)
+    this.#nrOfGuesses = this.#nrOfGuesses + 1
+    return (guess === this.#word)
   }
 
   compareGuessAndWord(guess) {
