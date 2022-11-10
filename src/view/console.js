@@ -22,21 +22,58 @@ export class Console {
   }
 
   async displayMenu () {
-    const answer = await this.getInput('Press P to play a new game or Q to quit:')
 
-    if(answer == 'p') {
-      return true
-    } else if (answer == 'q') {
-      return false
-    } else {
-      return false
+    let gettingInput = true
+    while(gettingInput) {
+      const answer = await this.getInput('Press P to play a new game or Q to quit:')
+
+      if(answer.toLowerCase() === 'p') {
+        return true
+      } else if (answer.toLowerCase() === 'q') {
+        return false
+      } else {
+        console.log('Please enter P or Q')
+      }
     }
-
+    
   }
 
   async getSubject () {
-     const answer = await this.getInput('Enter a wiki article subject:')
-     return answer
+
+    let gettingSubject = true
+    while(gettingSubject) {
+      const answer = await this.getInput('Enter a wiki article subject:')
+
+      const answerArray = answer.split(" ")
+      
+     
+      // ändra så model har en subject ok metod? eller bara bryta ut
+      let subject
+      for(const word of answerArray) {
+        if(subject === undefined) {
+          subject = word
+        } else {
+          subject = subject + '_' + word
+        }
+      }
+       
+      let subjectOk = true
+      for(let i = 0; i < answerArray.length; i++) {
+        if(!(/^[a-z]+$/i.test(answerArray[i]))) {
+          console.log('Please enter a subject with only letters!')
+          i = answerArray.length
+          subjectOk = false
+        } 
+      }
+
+      if(subjectOk) {
+        return subject
+      }
+
+    }
+    
+
+    
   }
 
   displayWordHints (arrayOfHints) {

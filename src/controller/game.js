@@ -15,7 +15,7 @@ export class Game {
       if(play) {
         await this.playGame()
       } else {
-        running = false
+         running = false
       }
     }
    this.#view.closeReadline()
@@ -31,6 +31,11 @@ export class Game {
     
   
     
+  }
+
+ async getAndSetGameSubject() {
+    const answer = await this.#view.getSubject()
+    await this.#gameModel.setSubject(answer)
   }
 
   async playRound() {
@@ -56,10 +61,6 @@ export class Game {
     
   }
 
-  async getAndSetGameSubject() {
-    const answer = await this.#view.getSubject()
-    await this.#gameModel.setSubject(answer)
-  }
 
 
 }

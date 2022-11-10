@@ -14,8 +14,15 @@ export class WordGetter {
 async scrapeWikiForWords (subject) {
 
    const tags = await this.scrapceUrlForForText(subject)
-   //console.log(subject)
 
+   for(const tag of tags) {
+    if(tag.textContent.includes('may refer to')) {
+      console.log('may refer tooooo')
+    }
+   }
+
+
+   console.log(tags)
    if(tags.length > 0) {
     const goodWordsArray = []
 
@@ -31,7 +38,7 @@ async scrapeWikiForWords (subject) {
           }
           
         }
-        //console.log(goodWordsArray)
+        console.log(goodWordsArray)
         this.#listOfWords = goodWordsArray
    }
 

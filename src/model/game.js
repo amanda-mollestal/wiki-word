@@ -17,6 +17,7 @@ export class Game {
 
 
   async setSubject (subject) {
+    
     await this.#wordGetter.scrapeWikiForWords(subject)
     this.#subject = subject
   }
