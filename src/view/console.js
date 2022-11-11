@@ -72,8 +72,11 @@ export class Console {
 
     }
     
+  }
 
-    
+  displaySubjectMsg () {
+    console.log('There was no specific wiki artical for the given subject...')
+    console.log('Could you try to be more specific, add a word or maybe rephrase?')
   }
 
   displayWordHints (arrayOfHints) {

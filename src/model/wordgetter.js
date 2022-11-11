@@ -17,12 +17,14 @@ async scrapeWikiForWords (subject) {
 
    for(const tag of tags) {
     if(tag.textContent.includes('may refer to')) {
-      console.log('may refer tooooo')
+      //console.log('may refer tooooo')
+      //this.scrapeUrlForSuggestion(subject, tag.textContent)
+      return false
     }
    }
 
 
-   console.log(tags)
+   //console.log(tags)
    if(tags.length > 0) {
     const goodWordsArray = []
 
@@ -40,11 +42,47 @@ async scrapeWikiForWords (subject) {
         }
         console.log(goodWordsArray)
         this.#listOfWords = goodWordsArray
+        return true
+   } else {
+    return false
    }
-
-    
    
 }
+
+/*async scrapeUrlForSuggestion(subject, words) {
+
+  let ret = words.replace(/may refer to:/g,'')
+  ret = ret.replace(/or/g,'')
+  ret = ret.replace(/ /g,'');
+  ret = ret.replace('\n','');
+  const wordArray = ret.split(",")
+
+  console.log(wordArray)
+
+  const url = 'https://en.wikipedia.org/wiki/'
+
+    const html = await this.#scraper.getHtmlFromUrl(url + subject) 
+    const tags = await this.#scraper.scrapeHtmlForTagAttribute(html, 'a', 'title')
+    //const tags = await this.#scraper.scrapeHtmlForTags(html, 'ul')
+  
+    //console.log(tags)
+
+    const suggestions = []
+
+    for(const tag of tags) {
+      
+      for(let i = 0; i < wordArray.length; i++) {
+        if(tag !== undefined && tag.includes(wordArray[i]) && /^[a-z]/i.test(tag)) {
+          suggestions.push(tag)
+          i = wordArray.length
+        }
+      }
+
+    }
+
+    console.log(suggestions)
+
+}*/ 
 
 async scrapceUrlForForText(subject) {
   const url = 'https://en.wikipedia.org/wiki/'
@@ -55,7 +93,7 @@ async scrapceUrlForForText(subject) {
     //console.log(tags)
     return tags
   } catch (error) {
-    console.log('There were no articals matching your subject')
+    //console.log('There were no articals matching your subject')
     return []
   }
 }

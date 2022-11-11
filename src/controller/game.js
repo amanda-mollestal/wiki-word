@@ -25,17 +25,25 @@ export class Game {
   async playGame () {
 
     await this.getAndSetGameSubject()
-
-    while(await this.playRound()) {
-    } 
-    
-  
+   
+     while(await this.playRound()) {
+     } 
+      
     
   }
 
  async getAndSetGameSubject() {
+
+  let gotSubject = false
+  do {
     const answer = await this.#view.getSubject()
-    await this.#gameModel.setSubject(answer)
+    gotSubject = await this.#gameModel.setSubject(answer) 
+    if(gotSubject === false) {
+      this.#view.displaySubjectMsg()
+    }
+
+  } while (gotSubject === false);
+    
   }
 
   async playRound() {

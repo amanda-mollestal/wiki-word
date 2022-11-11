@@ -2,7 +2,6 @@ import { WordGetter } from "./wordgetter.js";
 
 export class Game {
   #wordGetter
-  #player
   #word
   #wordHints
   #subject
@@ -16,10 +15,25 @@ export class Game {
   }
 
 
+  // hmmm.. method ska bara göra en sak inte göra en sak och returnera
+  // kasta error istället som fångas i controller?
+  // set subject till inget och kolla det i controller?
   async setSubject (subject) {
+
     
-    await this.#wordGetter.scrapeWikiForWords(subject)
-    this.#subject = subject
+      const gotWords = await this.#wordGetter.scrapeWikiForWords(subject)
+
+      if(gotWords) {
+        //console.log('found article')
+        this.#subject = subject
+        return true
+      } else {
+        //console.log('found no article')
+        return false
+      }
+    
+    
+
   }
 
   getSubject() {
