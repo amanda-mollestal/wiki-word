@@ -50,6 +50,10 @@ export class Game {
     console.log(this.#word)
   }
 
+  getWord() {
+    return this.#word
+  }
+
   getWordHints() {
     return this.#wordHints
   }

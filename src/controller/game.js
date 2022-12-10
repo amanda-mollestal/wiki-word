@@ -53,7 +53,7 @@ export class Game {
     
     do {
       this.#view.displayWordHints(this.#gameModel.getWordHints()) 
-      const guess = await this.#view.getWordGuess(this.#gameModel.getNrOfGuesses())
+      const guess = await this.#view.getWordGuess(this.#gameModel.getNrOfGuesses(), this.#gameModel.getWordHints())
       //this.#view.displayNrOfGuesses(this.#gameModel.getNrOfGuesses())
 
       if(!this.#gameModel.isGuessRight(guess)) {

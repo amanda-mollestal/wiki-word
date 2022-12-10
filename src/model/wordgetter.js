@@ -40,7 +40,7 @@ async scrapeWikiForWords (subject) {
           }
           
         }
-        console.log(goodWordsArray)
+        //console.log(goodWordsArray)
         this.#listOfWords = goodWordsArray
         return true
    } else {

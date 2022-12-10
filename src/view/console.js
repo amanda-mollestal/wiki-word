@@ -75,7 +75,7 @@ export class Console {
   }
 
   displaySubjectMsg () {
-    console.log('There was no specific wiki artical for the given subject...')
+    console.log('There was no specific wiki article for the given subject...')
     console.log('Could you try to be more specific, add a word or maybe rephrase?')
   }
 
@@ -87,9 +87,24 @@ export class Console {
     console.log(str)
   }
 
-  async getWordGuess(nr) {
-    const guess = await this.getInput(`Guess nr ${nr + 1}:`)
-    return guess
+  async getWordGuess(nr, arrayOfHints) {
+
+    while (true) {
+      const guess = await this.getInput(`Guess nr ${nr + 1}:`)
+
+      if(!(/^[a-z]+$/i.test(guess))) {
+        console.log('Please guess a word with only letters')
+      }
+
+      if(guess.length === arrayOfHints.length) {
+        return guess
+      } else {
+        console.log('Please guess a word with ' + arrayOfHints.length + ' letters')
+      }
+     
+    }
+
+  
   }
 
  
