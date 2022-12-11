@@ -34,8 +34,8 @@ async scrapeWikiForWords (subject) {
           const wordArray = text.split(" ")
 
           for(const word of wordArray) {
-            if(word.length > 5 && /^[a-z]+$/i.test(word)) {
-              goodWordsArray.push(word)
+            if(word.length > 4 && word.length < 10 && /^[a-z]+$/i.test(word)) {
+              goodWordsArray.push(word.toLowerCase())
             }
           }
           

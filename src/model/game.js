@@ -47,7 +47,7 @@ export class Game {
    for(let i = 0; i < this.#word.length; i++) {
       this.#wordHints.push('_')
     }
-    console.log(this.#word)
+    //console.log(this.#word)
   }
 
   getWord() {

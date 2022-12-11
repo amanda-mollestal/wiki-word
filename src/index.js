@@ -5,7 +5,7 @@ import { Console } from "./view/console.js"
 
 const gameModel = new Model()
 
-const view = new Console()
+const view = new Console(gameModel)
 
 const gameController = new Controller(gameModel, view)
 

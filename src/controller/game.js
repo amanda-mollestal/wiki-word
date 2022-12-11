@@ -9,6 +9,7 @@ export class Game {
 
   async run () {
     this.#view.displayWelcome()
+    this.#view.displayRules()
     let running = true
     while(running) {
       const play = await this.#view.displayMenu()
@@ -56,11 +57,17 @@ export class Game {
       const guess = await this.#view.getWordGuess(this.#gameModel.getNrOfGuesses(), this.#gameModel.getWordHints())
       //this.#view.displayNrOfGuesses(this.#gameModel.getNrOfGuesses())
 
+      if(guess === 'i give up') {
+        this.#view.displayGiveUp()
+        running = false 
+        return await this.#view.playAgain()
+      }
+
       if(!this.#gameModel.isGuessRight(guess)) {
          this.#gameModel.compareGuessAndWord(guess)
-        //console.log(guess)
+         
       } else {
-        console.log('HELT RÄTT')
+        this.#view.displayWinMsg()
         running = false 
         return await this.#view.playAgain()
       }

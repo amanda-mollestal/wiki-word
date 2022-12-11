@@ -3,8 +3,10 @@ import { stdin as input, stdout as output } from 'node:process';
 
 export class Console {
   #rl
+  #model
 
-  constructor () {
+  constructor (model) {
+    this.#model = model
     this.#rl = readline.createInterface({ input, output })
   }
 
@@ -13,7 +15,14 @@ export class Console {
   }
 
   displayWelcome () {
-    console.log(' == WELCOME TO WIKI-WORD == ')
+    console.log(' === WELCOME TO WIKI-WORD === ')
+  }
+
+  displayRules () {
+    console.log(' ')
+    console.log('  You choose a Wikipedia article and the\n  game will pick a random word from that article.\n  Can you guess the secret word?\n  If not, just write "i give up".')
+    console.log(' ')
+
   }
 
   async getInput (question) {
@@ -25,7 +34,7 @@ export class Console {
 
     let gettingInput = true
     while(gettingInput) {
-      const answer = await this.getInput('Press P to play a new game or Q to quit:')
+      const answer = await this.getInput(' Press P to play a new game \n Press Q to quit \n = ')
 
       if(answer.toLowerCase() === 'p') {
         return true
@@ -42,6 +51,7 @@ export class Console {
 
     let gettingSubject = true
     while(gettingSubject) {
+      console.log(' ')
       const answer = await this.getInput('Enter a wiki article subject:')
 
       const answerArray = answer.split(" ")
@@ -80,17 +90,24 @@ export class Console {
   }
 
   displayWordHints (arrayOfHints) {
+    console.log(' ')
     let str = ''
     for(const x of arrayOfHints) {
       str = str + x + ' '
     }
     console.log(str)
+    console.log(' ')
+
   }
 
   async getWordGuess(nr, arrayOfHints) {
 
     while (true) {
       const guess = await this.getInput(`Guess nr ${nr + 1}:`)
+
+      if(guess === 'i give up') {
+        return guess
+      }
 
       if(!(/^[a-z]+$/i.test(guess))) {
         console.log('Please guess a word with only letters')
@@ -107,6 +124,23 @@ export class Console {
   
   }
 
+  displayWin() {
+    const word = this.#model.getWord()
+    console.log(' ')
+    console.log('CONGRATULATIONS!')
+    console.log('You guessed the right word ' + word +  ', you are the best!!!')
+    console.log(' ')
+
+
+  }
+
+  displayGiveUp() {
+    const word = this.#model.getWord()
+    console.log(' ')
+    console.log('Oh, too difficult? Here is the secret word: ' + word)
+    console.log(' ')
+
+  }
  
 
   async playAgain() {
