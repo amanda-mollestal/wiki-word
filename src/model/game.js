@@ -24,11 +24,10 @@ export class Game {
       const gotWords = await this.#wordGetter.scrapeWikiForWords(subject)
 
       if(gotWords) {
-        //console.log('found article')
+       
         this.#subject = subject
         return true
       } else {
-        //console.log('found no article')
         return false
       }
     
@@ -47,7 +46,6 @@ export class Game {
    for(let i = 0; i < this.#word.length; i++) {
       this.#wordHints.push('_')
     }
-    //console.log(this.#word)
   }
 
   getWord() {
@@ -74,13 +72,6 @@ export class Game {
       }
     }
   }
-
-  setPlayerGuess(guess) {
-
-  }
-
-
-
 
 
 }

@@ -11,6 +11,7 @@ export class Game {
     this.#view.displayWelcome()
     this.#view.displayRules()
     let running = true
+    
     while(running) {
       const play = await this.#view.displayMenu()
       if(play) {
@@ -19,6 +20,7 @@ export class Game {
          running = false
       }
     }
+
    this.#view.closeReadline()
   }
 
@@ -53,9 +55,8 @@ export class Game {
     let running = true
     
     do {
-      this.#view.displayWordHints(this.#gameModel.getWordHints()) 
-      const guess = await this.#view.getWordGuess(this.#gameModel.getNrOfGuesses(), this.#gameModel.getWordHints())
-      //this.#view.displayNrOfGuesses(this.#gameModel.getNrOfGuesses())
+      this.#view.displayWordHints() 
+      const guess = await this.#view.getWordGuess()
 
       if(guess === 'i give up') {
         this.#view.displayGiveUp()
@@ -65,7 +66,7 @@ export class Game {
 
       if(!this.#gameModel.isGuessRight(guess)) {
          this.#gameModel.compareGuessAndWord(guess)
-         
+
       } else {
         this.#view.displayWinMsg()
         running = false 

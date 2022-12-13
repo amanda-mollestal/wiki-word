@@ -89,7 +89,8 @@ export class Console {
     console.log('Could you try to be more specific, add a word or maybe rephrase?')
   }
 
-  displayWordHints (arrayOfHints) {
+  displayWordHints () {
+    const arrayOfHints = this.#model.getWordHints()
     console.log(' ')
     let str = ''
     for(const x of arrayOfHints) {
@@ -100,10 +101,12 @@ export class Console {
 
   }
 
-  async getWordGuess(nr, arrayOfHints) {
+  async getWordGuess() {
+
+    const guessNr = this.#model.getNrOfGuesses()
 
     while (true) {
-      const guess = await this.getInput(`Guess nr ${nr + 1}:`)
+      const guess = await this.getInput(`Guess nr ${guessNr + 1}:`)
 
       if(guess === 'i give up') {
         return guess
@@ -113,6 +116,8 @@ export class Console {
         console.log('Please guess a word with only letters')
       }
 
+      const arrayOfHints = this.#model.getWordHints()
+      
       if(guess.length === arrayOfHints.length) {
         return guess
       } else {
