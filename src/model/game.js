@@ -10,7 +10,9 @@ export class Game {
   constructor () {
     this.#wordGetter = new WordGetter()
     this.#word = ''
-    this.#wordHints = []
+    this.#wordHints = {}
+    this.#wordHints.rightPlace = []
+    this.#wordHints.wrongPlace = []
     this.#nrOfGuesses = 0
   }
 
@@ -41,11 +43,14 @@ export class Game {
 
   generateWord() {
     this.#nrOfGuesses = 0
-    this.#wordHints = []
     this.#word = this.#wordGetter.getRandomWord()
-   for(let i = 0; i < this.#word.length; i++) {
-      this.#wordHints.push('_')
-    }
+
+    this.#wordHints.rightPlace = []
+    this.#wordHints.wrongPlace = []
+
+    for(let i = 0; i < this.#word.length; i++) {
+        this.#wordHints.rightPlace[i] = '_'
+      }
   }
 
   getWord() {
@@ -66,12 +71,42 @@ export class Game {
   }
 
   compareGuessAndWord(guess) {
-    for(let i = 0; i < this.#word.length; i++) {
+
+    // bugg -> vid gissning på aaaaaa så blir det fel
+
+    for(let i = 0; i < guess.length; i++) {
+
       if(guess[i] === this.#word[i]) {
-        this.#wordHints[i] = this.#word[i]
+        this.#wordHints.rightPlace[i] = this.#word[i]
+
+        if (this.#wordHints.wrongPlace.includes(guess[i])) {
+
+         
+            const index = this.#wordHints.wrongPlace.indexOf(guess[i])
+
+          
+            this.#wordHints.wrongPlace.splice(index, 1);
+
+          /*this.#wordHints.wrongPlace = this.#wordHints.wrongPlace.filter(element => !this.#wordHints.wrongPlace.includes(guess[i]))*/ 
+        } 
+
+      } else if (this.#word.includes(guess[i])) {
+        
+        const matches = this.#word.split("a").length - 1
+
+        if (!this.#wordHints.wrongPlace.includes(guess[i])) {
+          this.#wordHints.wrongPlace.push(guess[i])
+        } else {
+        const count = this.#wordHints.wrongPlace.reduce((total, letter) => total + (letter === guess[i]), 0);
+
+          if (count < matches) {
+            this.#wordHints.wrongPlace.push(guess[i])
+          }
       }
+
     }
   }
 
 
+}
 }

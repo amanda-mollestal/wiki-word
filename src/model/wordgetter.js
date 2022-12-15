@@ -11,6 +11,7 @@ export class WordGetter {
   }
 
 
+// inte göra en sak och returnera, kasta error istället som fångas i controller?
 async scrapeWikiForWords (subject) {
 
    const tags = await this.scrapceUrlForForText(subject)
@@ -34,7 +35,7 @@ async scrapeWikiForWords (subject) {
           const wordArray = text.split(" ")
 
           for(const word of wordArray) {
-            if(word.length > 4 && word.length < 10 && /^[a-z]+$/i.test(word)) {
+            if(word.length === 5 && /^[a-z]+$/i.test(word)) {
               goodWordsArray.push(word.toLowerCase())
             }
           }
@@ -48,41 +49,6 @@ async scrapeWikiForWords (subject) {
    }
    
 }
-
-/*async scrapeUrlForSuggestion(subject, words) {
-
-  let ret = words.replace(/may refer to:/g,'')
-  ret = ret.replace(/or/g,'')
-  ret = ret.replace(/ /g,'');
-  ret = ret.replace('\n','');
-  const wordArray = ret.split(",")
-
-  console.log(wordArray)
-
-  const url = 'https://en.wikipedia.org/wiki/'
-
-    const html = await this.#scraper.getHtmlFromUrl(url + subject) 
-    const tags = await this.#scraper.scrapeHtmlForTagAttribute(html, 'a', 'title')
-    //const tags = await this.#scraper.scrapeHtmlForTags(html, 'ul')
-  
-    //console.log(tags)
-
-    const suggestions = []
-
-    for(const tag of tags) {
-      
-      for(let i = 0; i < wordArray.length; i++) {
-        if(tag !== undefined && tag.includes(wordArray[i]) && /^[a-z]/i.test(tag)) {
-          suggestions.push(tag)
-          i = wordArray.length
-        }
-      }
-
-    }
-
-    console.log(suggestions)
-
-}*/ 
 
 async scrapceUrlForForText(subject) {
   const url = 'https://en.wikipedia.org/wiki/'

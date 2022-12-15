@@ -52,7 +52,9 @@ export class Console {
     let gettingSubject = true
     while(gettingSubject) {
       console.log(' ')
-      const answer = await this.getInput('Enter a wiki article subject:')
+      let answer = await this.getInput('Enter a wiki article subject:')
+
+      answer = answer.trim().toLowerCase()
 
       const answerArray = answer.split(" ")
       
@@ -60,7 +62,8 @@ export class Console {
       // ändra så model har en subject ok metod? eller bara bryta ut
       let subject
       for(const word of answerArray) {
-        if(subject === undefined) {
+
+        if(subject === undefined && word.length > 0) {
           subject = word
         } else {
           subject = subject + '_' + word
@@ -90,13 +93,20 @@ export class Console {
   }
 
   displayWordHints () {
-    const arrayOfHints = this.#model.getWordHints()
+    const wordHints = this.#model.getWordHints()
     console.log(' ')
     let str = ''
-    for(const x of arrayOfHints) {
+    for(const x of wordHints.rightPlace) {
       str = str + x + ' '
     }
-    console.log(str)
+
+    
+    if(wordHints.wrongPlace.length > 0) {
+      console.log(str + ' [' + wordHints.wrongPlace + ']')
+    } else {
+      console.log(str)
+    }
+
     console.log(' ')
 
   }
@@ -112,16 +122,20 @@ export class Console {
         return guess
       }
 
+      if(guess === 'amanda är bäst') {
+        console.log(this.#model.getWord())
+      }
+
       if(!(/^[a-z]+$/i.test(guess))) {
         console.log('Please guess a word with only letters')
       }
 
-      const arrayOfHints = this.#model.getWordHints()
+      const word = this.#model.getWord()
       
-      if(guess.length === arrayOfHints.length) {
+      if(guess.length === word.length) {
         return guess
       } else {
-        console.log('Please guess a word with ' + arrayOfHints.length + ' letters')
+        console.log('Please guess a word with ' + word.length + ' letters')
       }
      
     }
@@ -133,7 +147,8 @@ export class Console {
     const word = this.#model.getWord()
     console.log(' ')
     console.log('CONGRATULATIONS!')
-    console.log('You guessed the right word ' + word +  ', you are the best!!!')
+    console.log('You guessed the right word "' + word + '" in ' + this.#model.getNrOfGuesses() + ' guesses!')
+    console.log('You are the best!!!')
     console.log(' ')
 
 

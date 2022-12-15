@@ -11,13 +11,13 @@ export class Game {
     this.#view.displayWelcome()
     this.#view.displayRules()
     let running = true
-    
+
     while(running) {
       const play = await this.#view.displayMenu()
       if(play) {
         await this.playGame()
       } else {
-         running = false
+        running = false
       }
     }
 
@@ -68,7 +68,7 @@ export class Game {
          this.#gameModel.compareGuessAndWord(guess)
 
       } else {
-        this.#view.displayWinMsg()
+        this.#view.displayWin()
         running = false 
         return await this.#view.playAgain()
       }
