@@ -21,6 +21,7 @@ export class Game {
 
     try {
       await this.#wordGetter.scrapeWikiForWords(subject)
+
       this.#subject = subject
    
     } catch (error) {
@@ -70,30 +71,39 @@ export class Game {
     for(let i = 0; i < guess.length; i++) {
 
       if(guess[i] === this.#word[i]) {
-        this.#wordHints.rightPlace[i] = this.#word[i]
 
-        if (this.#wordHints.wrongPlace.includes(guess[i])) {
-
-          const index = this.#wordHints.wrongPlace.indexOf(guess[i])
-        
-          this.#wordHints.wrongPlace.splice(index, 1)
-        
-        } 
+        this.#rightLetterRightPlace(i, guess)
 
       } else if (this.#word.includes(guess[i])) {
-        
-        const letterMatches = this.#word.split(guess[i]).length - 1
 
-        const countInWrong = this.#wordHints.wrongPlace.reduce((total, letter) => total + (letter === guess[i]), 0)
-        const countInRight = this.#wordHints.rightPlace.reduce((total, letter) => total + (letter === guess[i]), 0)
-  
-        if (countInWrong < letterMatches && letterMatches > countInRight) {
-          this.#wordHints.wrongPlace.push(guess[i])
-        }
-    
+        this.#rightLetterWrongPlace(i, guess)
+        
     }
   }
 
 
 }
+
+#rightLetterRightPlace(i, guess) {
+  this.#wordHints.rightPlace[i] = this.#word[i]
+
+  if (this.#wordHints.wrongPlace.includes(guess[i])) {
+
+    const index = this.#wordHints.wrongPlace.indexOf(guess[i])
+  
+    this.#wordHints.wrongPlace.splice(index, 1)
+  } 
+}
+
+#rightLetterWrongPlace(i, guess) {
+  const letterMatches = this.#word.split(guess[i]).length - 1
+
+  const countInWrong = this.#wordHints.wrongPlace.reduce((total, letter) => total + (letter === guess[i]), 0)
+  const countInRight = this.#wordHints.rightPlace.reduce((total, letter) => total + (letter === guess[i]), 0)
+
+  if (countInWrong < letterMatches && letterMatches > countInRight) {
+    this.#wordHints.wrongPlace.push(guess[i])
+  }
+}
+
 }

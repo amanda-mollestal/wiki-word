@@ -11,37 +11,13 @@ export class WordGetter {
   }
 
 async scrapeWikiForWords (subject) {
+  
+  const pTags = await this.scrapceUrlForForText(subject)
 
-   const tags = await this.scrapceUrlForForText(subject)
+  this.validateTagsAreFromArticle(pTags)
 
-   for(const tag of tags) {
-    if(tag.textContent.includes('may refer to')) {
-      throw new Error()
-    }
-   }
+  this.getWordsFromTags(pTags)
 
-   if(tags.length > 0) {
-    const goodWordsArray = []
-
-        for(const tag of tags) {
-          const text = tag.textContent
-
-          const wordArray = text.split(" ")
-
-          for(const word of wordArray) {
-            if(word.length === 5 && /^[a-z]+$/i.test(word)) {
-              goodWordsArray.push(word.toLowerCase())
-            }
-          }
-          
-        }
- 
-        this.#listOfWords = goodWordsArray
-        
-   } else {
-    throw new Error()
-   }
-   
 }
 
 async scrapceUrlForForText(subject) {
@@ -55,6 +31,37 @@ async scrapceUrlForForText(subject) {
   } catch (error) {
     return []
   }
+}
+
+validateTagsAreFromArticle(tags) {
+  if(tags.length === 0) {
+    throw new Error()
+  }
+  
+  for(const tag of tags) {
+    if(tag.textContent.includes('may refer to')) {
+      throw new Error()
+    }
+   }
+}
+
+getWordsFromTags(tags) {
+  const words = []
+
+  for(const tag of tags) {
+    const text = tag.textContent
+
+    const wordArray = text.split(" ")
+
+    for(const word of wordArray) {
+      if(word.length === 5 && /^[a-z]+$/i.test(word)) {
+        words.push(word.toLowerCase())
+      }
+    }
+    
+  }
+
+  this.#listOfWords = words
 }
 
 getRandomWord () {
