@@ -1,5 +1,8 @@
 import { WordGetter } from "./wordgetter.js";
 
+/**
+ * Game model object responsible for storing game data and logic.
+ */
 export class Game {
   #wordGetter
   #word
@@ -7,6 +10,9 @@ export class Game {
   #subject
   #nrOfGuesses
 
+  /**
+   * Creates an instance of game model.
+   */
   constructor () {
     this.#wordGetter = new WordGetter()
     this.#word = ''
@@ -17,6 +23,11 @@ export class Game {
     this.#nrOfGuesses = 0
   }
 
+  /**
+   * Scrapes Wikipedia for words related to the subject and sets the subject for the game.
+   * @param {string} subject - The subject for the game e.g. "football", "computer_programming" or "c++".
+   * @throws {Error} - If there is an error scraping Wikipedia for words.
+   */
   async setSubject (subject) {
 
     try {
@@ -31,10 +42,17 @@ export class Game {
 
   }
 
+  /**
+   * Gets the subject for the game.
+   * @returns {string} - The subject for the game.
+   */
   getSubject() {
     return this.#subject
   }
 
+  /**
+   * Generates a random word from the list of words scraped from Wikipedia.
+   */
   generateWord() {
     this.#nrOfGuesses = 0
     this.#word = this.#wordGetter.getRandomWord()
@@ -49,23 +67,44 @@ export class Game {
       }
   }
 
+  /**
+   * Gets the secret word for the game.
+   * @returns {string} - The secret word for the game.
+   */
   getWord() {
     return this.#word
   }
 
+  /**
+   * Gets the current word hints.
+   * @returns {Object} - The word current hints.
+   */
   getWordHints() {
     return this.#wordHints
   }
 
+  /**
+   * Gets the number of guesses made for a current word.
+   * @returns {number} - The number of guesses for the current word.
+   */
   getNrOfGuesses() {
     return this.#nrOfGuesses
   }
 
+  /**
+   * Checks if the guess is correct.
+   * @param {string} guess - The guess to check.
+   * @returns {boolean} - True if the guess is correct, false otherwise.
+   */
   isGuessRight(guess) {
     this.#nrOfGuesses = this.#nrOfGuesses + 1
     return (guess === this.#word)
   }
 
+  /**
+   * Compares the guess to the secret word and updates the word hints.
+   * @param {string} guess - The guess to compare to the secret word.
+   */
   compareGuessAndWord(guess) {
 
     for(let i = 0; i < guess.length; i++) {
@@ -84,6 +123,11 @@ export class Game {
 
 }
 
+/**
+ * Updates the word hints if the letter is in the right place.
+ * @param {number} i - The index of the letter in the word.
+ * @param {string} guess - The guess.
+ */
 #rightLetterRightPlace(i, guess) {
   this.#wordHints.rightPlace[i] = this.#word[i]
 
@@ -95,6 +139,11 @@ export class Game {
   } 
 }
 
+/**
+ * Updates the word hints if the letter is in the wrong place.
+ * @param {number} i - The index of the letter in the word.
+ * @param {string} guess - The guess.
+ */
 #rightLetterWrongPlace(i, guess) {
   const letterMatches = this.#word.split(guess[i]).length - 1
 

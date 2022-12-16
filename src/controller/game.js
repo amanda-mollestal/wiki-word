@@ -1,12 +1,23 @@
+/**
+ * The Game controller that manages the game flow and interactions between the game model and view.
+ */
 export class Game {
   #view
   #gameModel
 
+  /**
+   * Creates an instance of game controller.
+   * @param {Object} model - Game model object responsible for storing game data and logic.
+   * @param {Object} view - View object responsible for rendering game information and receiving user input.
+   */ 
   constructor (model, view) {
     this.#view = view
     this.#gameModel = model
   }
 
+  /**
+   * Initializes and runs the game.
+   */
   async run () {
     this.#view.displayWelcome()
     this.#view.displayRules()
@@ -24,16 +35,20 @@ export class Game {
    this.#view.closeReadline()
   }
 
-
+  /**
+   * Plays the game Wiki-Word.
+   */
   async playGame () {
-
     await this.getAndSetGameSubject()
-   
-     while(await this.playRound()) {
-     } 
-    
+
+    while(await this.playRound()) {
+    } 
+
   }
 
+  /**
+   * Gets and sets the subject for the game.
+   */
  async getAndSetGameSubject() {
 
   let gotSubject = false
@@ -56,6 +71,11 @@ export class Game {
     
   }
 
+  /**
+   * Plays a round of Wiki-Word.
+   * 
+   * @returns {boolean} - Returns true if the user wants to play again, false if not.
+   */
   async playRound() {
     
    await this.#gameModel.generateWord()
@@ -79,7 +99,5 @@ export class Game {
    }
     
   }
-
-
 
 }
