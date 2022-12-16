@@ -1,7 +1,7 @@
 ## This is unfortunately only available in Swedish at the moment.
 
 ## Test av krav #1 - Testfall 1.1 
-Mål: Att verifiera att spelets regler presenteras för användaren när applikationen körs.
+Mål: Att verifiera att spelets regler presenteras för användaren när när spelet startar.
 
 Förutsättningar: Applikationen ska vara installerad och tillgänglig för att köras på en dator med en konsol för att köra Node-applikationer.
 
@@ -12,7 +12,7 @@ Steg-för-stegbeskrivning av test:
 2.	Kör kommandot ’npm start’ för att starta applikationen.
 3.	Observera applikationens utdata som presenteras i konsolen.
 
-Förväntat resultat: Applikationen ska visa spelreglerna för användaren när applikationen körs. Detta bör innehålla instruktioner om hur man spelar spelet och de alternativ som är tillgängliga för användaren.
+Förväntat resultat: Applikationen ska visa spelreglerna för användaren när när spelet startar. Detta bör innehålla instruktioner om hur man spelar spelet och de alternativ som är tillgängliga för användaren.
 
 ## Test av krav #2 - Testfall 2.1 
 
@@ -115,7 +115,7 @@ Steg-för-stegbeskrivning av test:
 Förväntat resultat: Applikationen ska presentera ett felmeddelande, inte räkna det som en giltig gissning och be om en ny gissning. 
 
 ## Test av krav #7 - Testfall 7.1 
-Mål: Att verifiera att en användare kan se antalet gissningar för ett gömt ord
+Mål: Att verifiera att en användare kan se antalet  gissningar den gjort hittils pågående runda.
 
 Förutsättningar: Applikationen ska vara installerad och tillgänglig för att köras på en dator med en konsol för att köra Node-applikationer. Datorn har tillgång till internet för att kunna skrapa Wikipedia. 
 
@@ -156,7 +156,7 @@ Steg-för-stegbeskrivning av test:
 Förväntat resultat: Applikationen ska presentera det gömda ordet för användaren.
 
 ## Test av krav #9 - Testfall 9.1 
-Mål: Att verifiera att en användare ska få reda på när hon gissat rätt.
+Mål: Att verifiera att en användare ska få reda på när en gissning matchar det gömda ordet.
 
 Förutsättningar: Applikationen ska vara installerad och tillgänglig för att köras på en dator med en konsol för att köra Node-applikationer. Datorn har tillgång till internet för att kunna skrapa Wikipedia. 
 

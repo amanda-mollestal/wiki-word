@@ -4,6 +4,10 @@ import { Scraper } from "multi-scraper"
  * Class responsibale for scraping and storing words from wikipedia articles related to a subject.
  */
 export class WordGetter {
+  
+  /**
+   * @type {Object} - Scraper object used for scraping Wikipedia for words.
+   */
   #scraper
   #listOfWords
 

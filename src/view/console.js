@@ -14,6 +14,10 @@ export class Console {
    */
   constructor (model) {
     this.#model = model
+
+    /**
+     * @type {Object} - Readline object responsible for reading user input.
+     */
     this.#rl = readline.createInterface({ input, output })
   }
 
@@ -144,7 +148,6 @@ export class Console {
      
     }
 
-  
   }
 
   displayWin() {

@@ -14,12 +14,39 @@ export class Game {
    * Creates an instance of game model.
    */
   constructor () {
+    /**
+     * @type {Object} - WordGetter object responsible for scraping Wikipedia for words.
+     */
     this.#wordGetter = new WordGetter()
-    this.#word = ''
+
+    /**
+     * @type {string} - The subject for the game.
+     */
     this.#subject = ''
+
+    /**
+     * @type {string} - The word for the game.
+     */
+    this.#word = ''
+
+    /**
+     * @type {Object} - Object containing the hints for the word.
+     */
     this.#wordHints = {}
+
+    /**
+     *  @type {Array} - Array containing the hints on the right place.
+     */
     this.#wordHints.rightPlace = []
+
+    /**
+     * @type {Array} - Array containing the hints on the wrong place.
+     */
     this.#wordHints.wrongPlace = []
+
+    /**
+     * @type {number} - The number of guesses made for the current word.
+     */
     this.#nrOfGuesses = 0
   }
 
@@ -119,7 +146,6 @@ export class Game {
         
     }
   }
-
 
 }
 
