@@ -20,7 +20,7 @@ By Amanda Möllestål, am224pg.
 ### 2. Open a terminal in the directory where the application is installed.
 
 ### 3. Install dependencies
-This game depends on a module called Multi-Scraper. 
+### This game depends on a module called [Multi-Scraper](https://github.com/amanda-mollestal/multi-scraper).
 
 ``` 
 npm i
