@@ -31,7 +31,6 @@ export class Game {
    
      while(await this.playRound()) {
      } 
-      
     
   }
 
@@ -40,27 +39,33 @@ export class Game {
   let gotSubject = false
   do {
     const answer = await this.#view.getSubject()
-    gotSubject = await this.#gameModel.setSubject(answer) 
-    if(gotSubject === false) {
+
+    try {
+      await this.#gameModel.setSubject(answer)
+
+      if(this.#gameModel.getSubject() !== '') {
+        gotSubject = true
+      }
+
+    } catch (error) {
       this.#view.displaySubjectMsg()
     }
 
-  } while (gotSubject === false);
+
+  } while (gotSubject === false)
     
   }
 
   async playRound() {
     
    await this.#gameModel.generateWord()
-    let running = true
-    
-    do {
+
+   while(true) {
       this.#view.displayWordHints() 
       const guess = await this.#view.getWordGuess()
 
       if(guess === 'i give up') {
         this.#view.displayGiveUp()
-        running = false 
         return await this.#view.playAgain()
       }
 
@@ -69,11 +74,9 @@ export class Game {
 
       } else {
         this.#view.displayWin()
-        running = false 
         return await this.#view.playAgain()
       }
-    } while (running)
-    
+   }
     
   }
 

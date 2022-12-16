@@ -10,22 +10,16 @@ export class WordGetter {
    this.#listOfWords = []
   }
 
-
-// inte göra en sak och returnera, kasta error istället som fångas i controller?
 async scrapeWikiForWords (subject) {
 
    const tags = await this.scrapceUrlForForText(subject)
 
    for(const tag of tags) {
     if(tag.textContent.includes('may refer to')) {
-      //console.log('may refer tooooo')
-      //this.scrapeUrlForSuggestion(subject, tag.textContent)
-      return false
+      throw new Error()
     }
    }
 
-
-   //console.log(tags)
    if(tags.length > 0) {
     const goodWordsArray = []
 
@@ -41,11 +35,11 @@ async scrapeWikiForWords (subject) {
           }
           
         }
-        //console.log(goodWordsArray)
+ 
         this.#listOfWords = goodWordsArray
-        return true
+        
    } else {
-    return false
+    throw new Error()
    }
    
 }
@@ -56,20 +50,17 @@ async scrapceUrlForForText(subject) {
   try {
     const html = await this.#scraper.getHtmlFromUrl(url + subject) 
     const tags = await this.#scraper.scrapeHtmlForTags(html, 'p')
-    //console.log(tags)
+
     return tags
   } catch (error) {
-    //console.log('There were no articals matching your subject')
     return []
   }
 }
 
 getRandomWord () {
-  const nr = Math.floor(Math.random() * this.#listOfWords.length);
-  //console.log(this.#listOfWords)
+  const nr = Math.floor(Math.random() * this.#listOfWords.length)
 
   return this.#listOfWords[nr]
-  console.log(this.#listOfWords[nr])
 
 }
 

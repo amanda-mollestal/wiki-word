@@ -10,30 +10,23 @@ export class Game {
   constructor () {
     this.#wordGetter = new WordGetter()
     this.#word = ''
+    this.#subject = ''
     this.#wordHints = {}
     this.#wordHints.rightPlace = []
     this.#wordHints.wrongPlace = []
     this.#nrOfGuesses = 0
   }
 
-
-  // hmmm.. method ska bara göra en sak inte göra en sak och returnera
-  // kasta error istället som fångas i controller?
-  // set subject till inget och kolla det i controller?
   async setSubject (subject) {
 
-    
-      const gotWords = await this.#wordGetter.scrapeWikiForWords(subject)
-
-      if(gotWords) {
-       
-        this.#subject = subject
-        return true
-      } else {
-        return false
-      }
-    
-    
+    try {
+      await this.#wordGetter.scrapeWikiForWords(subject)
+      this.#subject = subject
+   
+    } catch (error) {
+      throw new Error()
+     
+    }
 
   }
 
@@ -44,6 +37,8 @@ export class Game {
   generateWord() {
     this.#nrOfGuesses = 0
     this.#word = this.#wordGetter.getRandomWord()
+
+    console.log(this.#word)
 
     this.#wordHints.rightPlace = []
     this.#wordHints.wrongPlace = []
@@ -72,8 +67,6 @@ export class Game {
 
   compareGuessAndWord(guess) {
 
-    // bugg -> vid gissning på aaaaaa så blir det fel
-
     for(let i = 0; i < guess.length; i++) {
 
       if(guess[i] === this.#word[i]) {
@@ -81,29 +74,23 @@ export class Game {
 
         if (this.#wordHints.wrongPlace.includes(guess[i])) {
 
-         
-            const index = this.#wordHints.wrongPlace.indexOf(guess[i])
-
-          
-            this.#wordHints.wrongPlace.splice(index, 1);
-
-          /*this.#wordHints.wrongPlace = this.#wordHints.wrongPlace.filter(element => !this.#wordHints.wrongPlace.includes(guess[i]))*/ 
+          const index = this.#wordHints.wrongPlace.indexOf(guess[i])
+        
+          this.#wordHints.wrongPlace.splice(index, 1)
+        
         } 
 
       } else if (this.#word.includes(guess[i])) {
         
-        const matches = this.#word.split("a").length - 1
+        const letterMatches = this.#word.split(guess[i]).length - 1
 
-        if (!this.#wordHints.wrongPlace.includes(guess[i])) {
+        const countInWrong = this.#wordHints.wrongPlace.reduce((total, letter) => total + (letter === guess[i]), 0)
+        const countInRight = this.#wordHints.rightPlace.reduce((total, letter) => total + (letter === guess[i]), 0)
+  
+        if (countInWrong < letterMatches && letterMatches > countInRight) {
           this.#wordHints.wrongPlace.push(guess[i])
-        } else {
-        const count = this.#wordHints.wrongPlace.reduce((total, letter) => total + (letter === guess[i]), 0);
-
-          if (count < matches) {
-            this.#wordHints.wrongPlace.push(guess[i])
-          }
-      }
-
+        }
+    
     }
   }
 

@@ -20,7 +20,15 @@ export class Console {
 
   displayRules () {
     console.log(' ')
-    console.log('  You choose a Wikipedia article and the\n  game will pick a random word from that article.\n  Can you guess the secret word?\n  If not, just write "i give up".')
+    console.log('  You choose a Wikipedia article and the')
+    console.log('  game will pick a random word from that article.')
+    console.log('  If you guess a word that contains the same letter in the same position as')
+    console.log('  the secret word, it will shown in the right place for your next guess.')
+    console.log('  If you guess a word that contains the right letter but on the wrong place,')
+    console.log('  it will be placed next to the secret word for your next guess.')
+    console.log(' ')
+    console.log('  Can you guess the secret word?')
+    console.log('  If not, just write "i give up".')
     console.log(' ')
 
   }
@@ -41,7 +49,9 @@ export class Console {
       } else if (answer.toLowerCase() === 'q') {
         return false
       } else {
+        console.log(' ')
         console.log('Please enter P or Q')
+        console.log(' ')
       }
     }
     
@@ -49,41 +59,17 @@ export class Console {
 
   async getSubject () {
 
-    let gettingSubject = true
-    while(gettingSubject) {
+    
       console.log(' ')
       let answer = await this.getInput('Enter a wiki article subject:')
 
       answer = answer.trim().toLowerCase()
 
-      const answerArray = answer.split(" ")
-      
-     
-      // ändra så model har en subject ok metod? eller bara bryta ut
-      let subject
-      for(const word of answerArray) {
+      const subject = answer.replace(/ /g, '_')
 
-        if(subject === undefined && word.length > 0) {
-          subject = word
-        } else {
-          subject = subject + '_' + word
-        }
-      }
-       
-      let subjectOk = true
-      for(let i = 0; i < answerArray.length; i++) {
-        if(!(/^[a-z]+$/i.test(answerArray[i]))) {
-          console.log('Please enter a subject with only letters!')
-          i = answerArray.length
-          subjectOk = false
-        } 
-      }
+      console.log(subject)
 
-      if(subjectOk) {
-        return subject
-      }
-
-    }
+      return subject
     
   }
 
@@ -116,7 +102,9 @@ export class Console {
     const guessNr = this.#model.getNrOfGuesses()
 
     while (true) {
-      const guess = await this.getInput(`Guess nr ${guessNr + 1}:`)
+      let guess = await this.getInput(`Guess nr ${guessNr + 1}:`)
+
+      guess = guess.trim().toLowerCase()
 
       if(guess === 'i give up') {
         return guess
