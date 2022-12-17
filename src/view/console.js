@@ -55,14 +55,15 @@ export class Console {
    */
   async displayMenu () {
 
-    let gettingInput = true
-    while(gettingInput) {
+    let displayingMenu = true
+    while (displayingMenu) {
       const answer = await this.#getInput(' Press P to play a new game \n Press Q to quit \n = ')
 
-      if(answer.toLowerCase() === 'p') {
-        return true
+      if (answer.toLowerCase() === 'p') {
+        return displayingMenu
       } else if (answer.toLowerCase() === 'q') {
-        return false
+        displayingMenu = false 
+        return displayingMenu
       } else {
         console.log(' ')
         console.log('Please enter P or Q')
@@ -77,19 +78,15 @@ export class Console {
    * @returns {string} - The subject for the game in the right format.
    */
   async getSubject () {
-
+    console.log(' ')
     
-      console.log(' ')
-      let answer = await this.#getInput('Enter a wiki article subject:')
+    let answer = await this.#getInput('Enter a wiki article subject:')
 
-      answer = answer.trim().toLowerCase()
+    answer = answer.trim().toLowerCase()
 
-      const subject = answer.replace(/ /g, '_')
+    const subject = answer.replace(/ /g, '_')
 
-      console.log(subject)
-
-      return subject
-    
+    return subject
   }
 
   displaySubjectMsg () {
@@ -104,16 +101,15 @@ export class Console {
     const wordHints = this.#model.getWordHints()
     console.log(' ')
     let str = ''
-    for(const x of wordHints.rightPlace) {
+    for (const x of wordHints.rightPlace) {
       str = str + x + ' '
     }
 
-    if(wordHints.wrongPlace.length > 0) {
+    if (wordHints.wrongPlace.length > 0) {
       console.log(str + ' [' + wordHints.wrongPlace + ']')
     } else {
       console.log(str)
     }
-
     console.log(' ')
   }
 
@@ -121,50 +117,47 @@ export class Console {
    * Asks the user for a guess and returns it.
    * @returns {string} - The word guess from the user.
    */
-  async getWordGuess() {
-
+  async getWordGuess () {
     const guessNr = this.#model.getNrOfGuesses()
+    let guessing = true
 
-    while (true) {
+    while (guessing) {
       let guess = await this.#getInput(`Guess nr ${guessNr + 1}:`)
 
       guess = guess.trim().toLowerCase()
 
-      if(guess === 'i give up') {
+      if (guess === 'i give up') {
+        guessing = false
         return guess
       }
 
-      if(!(/^[a-z]+$/i.test(guess))) {
+      if (!(/^[a-z]+$/i.test(guess))) {
         console.log('Please guess a word with only letters')
       }
 
       const word = this.#model.getWord()
       
-      if(guess.length === word.length) {
+      if (guess.length === word.length) {
+        guessing = false
         return guess
       } else {
         console.log('Please guess a word with ' + word.length + ' letters')
       }
-     
     }
-
   }
 
-  displayWin() {
+  displayWin () {
     console.log(' ')
     console.log('CONGRATULATIONS!')
     console.log('You guessed the right word "' + this.#model.getWord() + '" in ' + this.#model.getNrOfGuesses() + ' guesses!')
     console.log('You are the best!!!')
     console.log(' ')
-
-
   }
 
-  displayGiveUp() {
+  displayGiveUp () {
     console.log(' ')
     console.log('Oh, too difficult? Here is the secret word: ' + this.#model.getWord())
     console.log(' ')
-
   }
  
 
@@ -172,9 +165,9 @@ export class Console {
    * Asks the user if he wants to play again with the same subject.
    * @returns {boolean} - True if user wants to play again, false if user wants to go back to the menu.
    */
-  async playAgain() {
+  async playAgain () {
     const answer = await this.#getInput('Press P to play again with this subject or Q to go back:')
-    if(answer == 'p') {
+    if (answer == 'p') {
       return true
     } else if (answer == 'q') {
       return false
@@ -189,5 +182,4 @@ export class Console {
   closeReadline () {
     this.#rl.close()
   }
-
 }

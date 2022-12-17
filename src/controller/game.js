@@ -23,9 +23,9 @@ export class Game {
     this.#view.displayRules()
     let running = true
 
-    while(running) {
+    while (running) {
       const play = await this.#view.displayMenu()
-      if(play) {
+      if (play) {
         await this.playGame()
       } else {
         running = false
@@ -36,11 +36,11 @@ export class Game {
   }
 
   /**
-   * Plays the game Wiki-Word.
+   * Plays a round of Wiki-Word until the player decides to quit the game.
    */
   async playGame () {
     await this.getAndSetGameSubject()
-
+  
     while(await this.playRound()) {
     } 
 
@@ -49,26 +49,23 @@ export class Game {
   /**
    * Gets and sets the subject for the game.
    */
- async getAndSetGameSubject() {
+  async getAndSetGameSubject() {
+    let gotSubject = false
 
-  let gotSubject = false
-  do {
-    const answer = await this.#view.getSubject()
+    do {
+      const answer = await this.#view.getSubject()
 
-    try {
-      await this.#gameModel.setSubject(answer)
+      try {
+        await this.#gameModel.setSubject(answer)
 
-      if(this.#gameModel.getSubject() !== '') {
-        gotSubject = true
+        if (this.#gameModel.getSubject() !== '') {
+          gotSubject = true
+        }
+
+      } catch (error) {
+        this.#view.displaySubjectMsg()
       }
-
-    } catch (error) {
-      this.#view.displaySubjectMsg()
-    }
-
-
-  } while (gotSubject === false)
-    
+    } while (gotSubject === false)
   }
 
   /**
@@ -76,28 +73,27 @@ export class Game {
    * 
    * @returns {boolean} - Returns true if the user wants to play again, false if not.
    */
-  async playRound() {
-    
-   await this.#gameModel.generateWord()
+  async playRound () {
+    await this.#gameModel.generateWord()
 
-   while(true) {
+    let playing = true
+    while (playing) {
       this.#view.displayWordHints() 
       const guess = await this.#view.getWordGuess()
 
-      if(guess === 'i give up') {
+      if (guess === 'i give up') {
         this.#view.displayGiveUp()
-        return await this.#view.playAgain()
+        playing = await this.#view.playAgain()
+        return playing
       }
 
-      if(!this.#gameModel.isGuessRight(guess)) {
-         this.#gameModel.compareGuessAndWord(guess)
-
-      } else {
+      if (this.#gameModel.isGuessRight(guess)) {
         this.#view.displayWin()
-        return await this.#view.playAgain()
+        playing = await this.#view.playAgain()
+        return playing
+      } else {
+        this.#gameModel.compareGuessAndWord(guess)
       }
-   }
-    
+    }
   }
-
 }

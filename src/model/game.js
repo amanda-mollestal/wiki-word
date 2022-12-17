@@ -56,31 +56,29 @@ export class Game {
    * @throws {Error} - If there is an error scraping Wikipedia for words.
    */
   async setSubject (subject) {
-
     try {
       await this.#wordGetter.scrapeWikiForWords(subject)
 
       this.#subject = subject
    
     } catch (error) {
-      throw new Error()
-     
+      error.msg = 'Error scraping Wikipedia for words.'
+      throw error
     }
-
   }
 
   /**
    * Gets the subject for the game.
    * @returns {string} - The subject for the game.
    */
-  getSubject() {
+  getSubject () {
     return this.#subject
   }
 
   /**
    * Generates a random word from the list of words scraped from Wikipedia.
    */
-  generateWord() {
+  generateWord () {
     this.#nrOfGuesses = 0
     this.#word = this.#wordGetter.getRandomWord()
 
@@ -89,16 +87,16 @@ export class Game {
     this.#wordHints.rightPlace = []
     this.#wordHints.wrongPlace = []
 
-    for(let i = 0; i < this.#word.length; i++) {
-        this.#wordHints.rightPlace[i] = '_'
-      }
+    for (let i = 0; i < this.#word.length; i++) {
+      this.#wordHints.rightPlace[i] = '_'
+    }
   }
 
   /**
    * Gets the secret word for the game.
    * @returns {string} - The secret word for the game.
    */
-  getWord() {
+  getWord () {
     return this.#word
   }
 
@@ -106,7 +104,7 @@ export class Game {
    * Gets the current word hints.
    * @returns {Object} - The word current hints.
    */
-  getWordHints() {
+  getWordHints () {
     return this.#wordHints
   }
 
@@ -114,7 +112,7 @@ export class Game {
    * Gets the number of guesses made for a current word.
    * @returns {number} - The number of guesses for the current word.
    */
-  getNrOfGuesses() {
+  getNrOfGuesses () {
     return this.#nrOfGuesses
   }
 
@@ -123,7 +121,7 @@ export class Game {
    * @param {string} guess - The guess to check.
    * @returns {boolean} - True if the guess is correct, false otherwise.
    */
-  isGuessRight(guess) {
+  isGuessRight (guess) {
     this.#nrOfGuesses = this.#nrOfGuesses + 1
     return (guess === this.#word)
   }
@@ -132,53 +130,56 @@ export class Game {
    * Compares the guess to the secret word and updates the word hints.
    * @param {string} guess - The guess to compare to the secret word.
    */
-  compareGuessAndWord(guess) {
+  compareGuessAndWord (guess) {
+    for (let i = 0; i < guess.length; i++) {
 
-    for(let i = 0; i < guess.length; i++) {
-
-      if(guess[i] === this.#word[i]) {
+      if (guess[i] === this.#word[i]) {
 
         this.#rightLetterRightPlace(i, guess)
 
       } else if (this.#word.includes(guess[i])) {
 
-        this.#rightLetterWrongPlace(i, guess)
-        
+        this.#rightLetterWrongPlace(guess[i])
+
+      }
     }
   }
 
-}
+  /**
+   * Updates the word hints if the letter is in the right place.
+   * @param {number} i - The index of the letter in the word.
+   * @param {string} guess - The guess.
+   */
+  #rightLetterRightPlace (i, guess) {
+    this.#wordHints.rightPlace[i] = this.#word[i]
 
-/**
- * Updates the word hints if the letter is in the right place.
- * @param {number} i - The index of the letter in the word.
- * @param {string} guess - The guess.
- */
-#rightLetterRightPlace(i, guess) {
-  this.#wordHints.rightPlace[i] = this.#word[i]
+    if (this.#wordHints.wrongPlace.includes(guess[i])) {
 
-  if (this.#wordHints.wrongPlace.includes(guess[i])) {
-
-    const index = this.#wordHints.wrongPlace.indexOf(guess[i])
-  
-    this.#wordHints.wrongPlace.splice(index, 1)
-  } 
-}
-
-/**
- * Updates the word hints if the letter is in the wrong place.
- * @param {number} i - The index of the letter in the word.
- * @param {string} guess - The guess.
- */
-#rightLetterWrongPlace(i, guess) {
-  const letterMatches = this.#word.split(guess[i]).length - 1
-
-  const countInWrong = this.#wordHints.wrongPlace.reduce((total, letter) => total + (letter === guess[i]), 0)
-  const countInRight = this.#wordHints.rightPlace.reduce((total, letter) => total + (letter === guess[i]), 0)
-
-  if (countInWrong < letterMatches && letterMatches > countInRight) {
-    this.#wordHints.wrongPlace.push(guess[i])
+      const index = this.#wordHints.wrongPlace.indexOf(guess[i])
+    
+      this.#wordHints.wrongPlace.splice(index, 1)
+    } 
   }
-}
 
+  /**
+   * Updates the word hints if the letter is in the wrong place.
+   * @param {string} letter - The letter.
+   */
+  #rightLetterWrongPlace (letter) {
+
+    // Use reduce to count the number of occurrences of the letter in the wordHints arrays.
+    const occurrencesOfLetterInWrongPlaceArray = this.#wordHints.wrongPlace.reduce((total, index) => total + (index === letter), 0)
+    const occurrencesOfLetterInRightPlaceArray = this.#wordHints.rightPlace.reduce((total, index) => total + (index === letter), 0)
+
+    let occurrencesOfLetterInWord = 0
+    for(let i = 0; i < this.#word.length; i++) { 
+      if (this.#word[i] === letter) {
+        occurrencesOfLetterInWord++
+      }
+    }
+
+    if (occurrencesOfLetterInWrongPlaceArray < occurrencesOfLetterInWord && occurrencesOfLetterInWord > occurrencesOfLetterInRightPlaceArray) {
+      this.#wordHints.wrongPlace.push(letter)
+    }
+  }
 }
