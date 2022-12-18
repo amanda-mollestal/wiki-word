@@ -6,14 +6,14 @@ import { stdin as input, stdout as output } from 'node:process';
  */
 export class Console {
   #rl
-  #model
+  #gameModel
 
   /**
    * Creates an instance of console view.
    * @param {Object} model - Game model object responsible for storing game data and logic.
    */
   constructor (model) {
-    this.#model = model
+    this.#gameModel = model
 
     /**
      * @type {Object} - Readline object responsible for reading user input.
@@ -98,7 +98,7 @@ export class Console {
    * Displays the secret word-hints and the number of guesses.
    */
   displayWordHints () {
-    const wordHints = this.#model.getWordHints()
+    const wordHints = this.#gameModel.getWordHints()
     console.log(' ')
     let str = ''
     for (const x of wordHints.rightPlace) {
@@ -118,7 +118,7 @@ export class Console {
    * @returns {string} - The word guess from the user.
    */
   async getWordGuess () {
-    const guessNr = this.#model.getNrOfGuesses()
+    const guessNr = this.#gameModel.getNrOfGuesses()
     let guessing = true
 
     while (guessing) {
@@ -135,7 +135,7 @@ export class Console {
         console.log('Please guess a word with only letters')
       }
 
-      const word = this.#model.getWord()
+      const word = this.#gameModel.getWord()
       
       if (guess.length === word.length) {
         guessing = false
@@ -149,14 +149,14 @@ export class Console {
   displayWin () {
     console.log(' ')
     console.log('CONGRATULATIONS!')
-    console.log('You guessed the right word "' + this.#model.getWord() + '" in ' + this.#model.getNrOfGuesses() + ' guesses!')
+    console.log('You guessed the right word "' + this.#gameModel.getWord() + '" in ' + this.#gameModel.getNrOfGuesses() + ' guesses!')
     console.log('You are the best!!!')
     console.log(' ')
   }
 
   displayGiveUp () {
     console.log(' ')
-    console.log('Oh, too difficult? Here is the secret word: ' + this.#model.getWord())
+    console.log('Oh, too difficult? Here is the secret word: ' + this.#gameModel.getWord())
     console.log(' ')
   }
  

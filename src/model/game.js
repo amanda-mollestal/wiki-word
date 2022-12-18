@@ -1,7 +1,7 @@
 import { WordGetter } from "./wordgetter.js";
 
 /**
- * Game model object responsible for storing game data and logic.
+ * Game model class responsible for storing game data and logic.
  */
 export class Game {
   #wordGetter
@@ -30,7 +30,7 @@ export class Game {
     this.#word = ''
 
     /**
-     * @type {Object} - Object containing the hints for the word.
+     * @type {Object} - Object created to contain the hints for the word.
      */
     this.#wordHints = {}
 
@@ -81,8 +81,6 @@ export class Game {
   generateWord () {
     this.#nrOfGuesses = 0
     this.#word = this.#wordGetter.getRandomWord()
-
-    console.log(this.#word)
 
     this.#wordHints.rightPlace = []
     this.#wordHints.wrongPlace = []
@@ -135,11 +133,11 @@ export class Game {
 
       if (guess[i] === this.#word[i]) {
 
-        this.#rightLetterRightPlace(i, guess)
+        this.#updateRightLetterRightPlace(i, guess)
 
       } else if (this.#word.includes(guess[i])) {
 
-        this.#rightLetterWrongPlace(guess[i])
+        this.#updateRightLetterWrongPlace(guess[i])
 
       }
     }
@@ -150,7 +148,7 @@ export class Game {
    * @param {number} i - The index of the letter in the word.
    * @param {string} guess - The guess.
    */
-  #rightLetterRightPlace (i, guess) {
+  #updateRightLetterRightPlace (i, guess) {
     this.#wordHints.rightPlace[i] = this.#word[i]
 
     if (this.#wordHints.wrongPlace.includes(guess[i])) {
@@ -165,9 +163,8 @@ export class Game {
    * Updates the word hints if the letter is in the wrong place.
    * @param {string} letter - The letter.
    */
-  #rightLetterWrongPlace (letter) {
+  #updateRightLetterWrongPlace (letter) {
 
-    // Use reduce to count the number of occurrences of the letter in the wordHints arrays.
     const occurrencesOfLetterInWrongPlaceArray = this.#wordHints.wrongPlace.reduce((total, index) => total + (index === letter), 0)
     const occurrencesOfLetterInRightPlaceArray = this.#wordHints.rightPlace.reduce((total, index) => total + (index === letter), 0)
 

@@ -69,9 +69,9 @@ export class Game {
   }
 
   /**
-   * Plays a round of Wiki-Word.
+   * Plays a full round of Wiki-Word.
    * 
-   * @returns {boolean} - Returns true if the user wants to play again, false if not.
+   * @returns {boolean} - Returns true if the user wants another round, false if not.
    */
   async playRound () {
     await this.#gameModel.generateWord()

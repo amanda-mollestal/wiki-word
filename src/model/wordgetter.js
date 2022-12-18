@@ -25,7 +25,7 @@ export class WordGetter {
    */
   async scrapeWikiForWords (subject) {
   
-    const pTags = await this.scrapceUrlForForText(subject)
+    const pTags = await this.scrapeUrlForForText(subject)
 
     this.validateTagsAreFromArticle(pTags)
 
@@ -37,7 +37,7 @@ export class WordGetter {
  * @param {string} subject - The subject of the Wikipedia article.
  * @returns {Array} - An array of p tags or an empty array if there is an error.
  */
-  async scrapceUrlForForText (subject) {
+  async scrapeUrlForForText (subject) {
     const url = 'https://en.wikipedia.org/wiki/'
 
     try {
@@ -57,12 +57,12 @@ export class WordGetter {
    */
   validateTagsAreFromArticle (tags) {
     if (tags.length === 0) {
-      throw new Error()
+      throw new InvalidTagError()
     }
     
     for (const tag of tags) {
       if (tag.textContent.includes('may refer to')) {
-        throw new Error()
+        throw new InvalidTagError()
       }
     }
   }
@@ -95,5 +95,12 @@ export class WordGetter {
   getRandomWord () {
     const nr = Math.floor(Math.random() * this.#listOfWords.length)
     return this.#listOfWords[nr]
+  }
+}
+
+class InvalidTagError extends Error {
+  constructor(message = "One or more invalid tags was found.") {
+    super(message)
+    this.name = "InvalidTagError"
   }
 }
